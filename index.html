@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mail.CSA - Dashboard Utama</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #f0f0f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            font-size: 2.5rem;
+            color: #6c5ce7;
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .logo-text h1 {
+            font-size: 2.2rem;
+            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+        
+        .logo-text p {
+            font-size: 0.9rem;
+            color: #b2bec3;
+            margin-top: -5px;
+        }
+        
+        /* Settings Button */
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(30deg);
+        }
+        
+        .settings-btn i {
+            font-size: 1.5rem;
+            color: #a29bfe;
+        }
+        
+        /* Settings Panel */
+        .settings-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 350px;
+            height: 100vh;
+            background: rgba(20, 15, 60, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
+            transition: right 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .settings-panel.active {
+            right: 0;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+        
+        .settings-header h2 {
+            color: #a29bfe;
+            font-size: 1.5rem;
+        }
+        
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: #b2bec3;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-btn:hover {
+            color: #ff7675;
+        }
+        
+        .owner-info {
+            background: rgba(108, 92, 231, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #6c5ce7;
+        }
+        
+        .owner-info h3 {
+            color: #a29bfe;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .owner-info h3 i {
+            font-size: 1.2rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .contact-item i {
+            color: #6c5ce7;
+            width: 25px;
+            font-size: 1.1rem;
+        }
+        
+        .contact-item a {
+            color: #dfe6e9;
+            text-decoration: none;
+            word-break: break-all;
+        }
+        
+        .contact-item a:hover {
+            color: #a29bfe;
+            text-decoration: underline;
+        }
+        
+        /* Dashboard Content */
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .dashboard-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #74b9ff, #6c5ce7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .dashboard-title p {
+            color: #b2bec3;
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Buttons Grid */
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .btn-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        
+        .btn-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.7s;
+        }
+        
+        .btn-card:hover::before {
+            left: 100%;
+        }
+        
+        .btn-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(108, 92, 231, 0.5);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .btn-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .btn-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #dfe6e9;
+        }
+        
+        .btn-card p {
+            color: #b2bec3;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .btn-action {
+            display: inline-block;
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+        }
+        
+        .btn-action:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(108, 92, 231, 0.6);
+            letter-spacing: 1px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+            color: #b2bec3;
+            font-size: 0.9rem;
+        }
+        
+        /* Animation for background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(108, 92, 231, 0.1) 0%, rgba(108, 92, 231, 0) 70%);
+            animation: float 15s infinite linear;
+        }
+        
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+        
+        .circle-2 {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            animation-delay: 5s;
+            animation-duration: 20s;
+        }
+        
+        .circle-3 {
+            width: 150px;
+            height: 150px;
+            bottom: 10%;
+            left: 20%;
+            animation-delay: 10s;
+            animation-duration: 25s;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+                opacity: 0.5;
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .logo-text h1 {
+                font-size: 1.8rem;
+            }
+            
+            .dashboard-title h2 {
+                font-size: 2rem;
+            }
+            
+            .buttons-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+    </div>
+    
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-envelope-open-text"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>Mail.CSA</h1>
+                    <p>Dashboard Layanan Premium</p>
+                </div>
+            </div>
+            
+            <!-- Settings Button -->
+            <div class="settings-btn" id="settingsBtn">
+                <i class="fas fa-cog"></i>
+            </div>
+        </header>
+        
+        <!-- Dashboard Content -->
+        <main>
+            <div class="dashboard-title">
+                <h2>Dashboard Utama Mail.CSA</h2>
+                <p>Akses layanan premium kami melalui dashboard ini. Setiap tombol akan membawa Anda ke layanan yang berbeda dengan kualitas terbaik.</p>
+            </div>
+            
+            <!-- Buttons Grid -->
+            <div class="buttons-grid">
+                <!-- Button 1 -->
+                <div class="btn-card">
+                    <div class="btn-icon">
+                        <i class="fas fa-search-dollar"></i>
+                    </div>
+                    <h3>WEB CEK MONET BY Mail.CSA</h3>
+                    <p>Layanan pengecekan monetisasi website dan analisis traffic untuk memaksimalkan pendapatan online Anda dengan akurasi tinggi.</p>
+                    <a href="https://scam-keylogger.vercel.app" target="_blank" class="btn-action">
+                        <i class="fas fa-external-link-alt"></i> Buka Layanan
+                    </a>
+                </div>
+                
+                <!-- Button 2 -->
+                <div class="btn-card">
+                    <div class="btn-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>WEB SUNTIK SMM BY Mail.VSA</h3>
+                    <p>Layanan suntik followers, likes, views, dan engagement sosial media lainnya untuk meningkatkan popularitas akun Anda.</p>
+                    <a href="https://fayupedia.id" target="_blank" class="btn-action">
+                        <i class="fas fa-external-link-alt"></i> Buka Layanan
+                    </a>
+                </div>
+            </div>
+        </main>
+        
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2023 Mail.CSA - Dashboard Premium. Hak Cipta Dilindungi.</p>
+            <p>Semua layanan yang ditampilkan adalah milik partner resmi Mail.CSA</p>
+        </footer>
+    </div>
+    
+    <!-- Settings Panel -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h2><i class="fas fa-sliders-h"></i> Pengaturan</h2>
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="owner-info">
+            <h3><i class="fas fa-user-circle"></i> Informasi Pemilik</h3>
+            
+            <div class="contact-item">
+                <i class="fas fa-phone-alt"></i>
+                <a href="tel:+62895605985577">+62 895-6059-85577</a>
+            </div>
+            
+            <div class="contact-item">
+                <i class="fab fa-whatsapp"></i>
+                <a href="https://whatsapp.com/channel/0029Vb6yPwGDzgTHh9U0FE2O" target="_blank">
+                    https://whatsapp.com/channel/0029Vb6yPwGDzgTHh9U0FE2O
+                </a>
+            </div>
+            
+            <div class="contact-item">
+                <i class="fas fa-info-circle"></i>
+                <span>Hubungi untuk informasi lebih lanjut</span>
+            </div>
+        </div>
+        
+        <div class="owner-info">
+            <h3><i class="fas fa-info-circle"></i> Tentang Dashboard</h3>
+            <p style="color: #b2bec3; line-height: 1.5; margin-top: 10px;">
+                Dashboard Mail.CSA adalah panel kontrol untuk mengakses layanan premium kami. 
+                Pastikan Anda mengunjungi website resmi kami melalui tombol di atas.
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Toggle Settings Panel
+        const settingsBtn = document.getElementById('settingsBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const settingsPanel = document.getElementById('settingsPanel');
+        
+        settingsBtn.addEventListener('click', () => {
+            settingsPanel.classList.add('active');
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            settingsPanel.classList.remove('active');
+        });
+        
+        // Close panel when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!settingsPanel.contains(e.target) && !settingsBtn.contains(e.target)) {
+                settingsPanel.classList.remove('active');
+            }
+        });
+        
+        // Button hover effects
+        const btnCards = document.querySelectorAll('.btn-card');
+        btnCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                const icon = card.querySelector('.btn-icon i');
+                icon.style.transform = 'scale(1.1) rotate(5deg)';
+                icon.style.transition = 'transform 0.3s ease';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                const icon = card.querySelector('.btn-icon i');
+                icon.style.transform = 'scale(1) rotate(0deg)';
+            });
+        });
+        
+        // Add animation to logo on load
+        window.addEventListener('load', () => {
+            const logoIcon = document.querySelector('.logo-icon i');
+            logoIcon.style.transform = 'rotate(360deg)';
+            logoIcon.style.transition = 'transform 1s ease';
+            
+            setTimeout(() => {
+                logoIcon.style.transform = 'rotate(0deg)';
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
